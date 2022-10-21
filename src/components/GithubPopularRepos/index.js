@@ -14,11 +14,18 @@ const languageFiltersData = [
   {id: 'CSS', language: 'CSS'},
 ]
 
+const repoDataFetchResponseStatus = {
+  initial: 'INITIAL',
+  loading: 'LOADING',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+}
+
 export default class GithubPopularRepos extends Component {
   state = {
     selectedRepoLanguageId: 'ALL',
     popularRepoListForSelectedLanguage: [],
-    isLoadingRepoData: true,
+    repoDataFetchingStatus: repoDataFetchResponseStatus.initial,
   }
 
   componentDidMount() {
@@ -27,34 +34,86 @@ export default class GithubPopularRepos extends Component {
 
   onRepoLanguageSelect = async repoLanguageId => {
     this.setState(async prevPopularRepoState => {
-      const {isLoadingRepoData} = prevPopularRepoState
+      const {repoDataFetchingStatus} = prevPopularRepoState
 
-      if (!isLoadingRepoData) {
+      if (repoDataFetchingStatus !== repoDataFetchResponseStatus.loading) {
         this.setState({
-          isLoadingRepoData: true,
+          repoDataFetchingStatus: repoDataFetchResponseStatus.loading,
         })
       }
+
+      let popularRepoList = []
+      let responseStatus = null
 
       const repoDataFetchUrlString = `https://apis.ccbp.in/popular-repos?language='${repoLanguageId}`
       // let repoDataFetchUrlInstance = new URL(repoDataFetchUrlString)
       // repoDataFetchUrlInstance.
       const repoDataResponse = await fetch(repoDataFetchUrlString)
-      const repoData = await repoDataResponse.json()
-      const popularRepoList = repoData.popular_repos
+
+      if (repoDataResponse.ok) {
+        const repoData = await repoDataResponse.json()
+        popularRepoList = repoData.popular_repos.map(popularRepoEntry => ({
+          id: popularRepoEntry.id,
+          name: popularRepoEntry.name,
+          issuesCount: popularRepoEntry.issues_count,
+          forksCount: popularRepoEntry.forks_count,
+          starsCount: popularRepoEntry.stars_count,
+          avatarUrl: popularRepoEntry.avatar_url,
+        }))
+        responseStatus = repoDataFetchResponseStatus.success
+      } else {
+        responseStatus = repoDataFetchResponseStatus.failure
+      }
 
       return {
         selectedRepoLanguageId: repoLanguageId,
         popularRepoListForSelectedLanguage: popularRepoList,
-        isLoadingRepoData: false,
+        repoDataFetchingStatus: responseStatus,
       }
     })
+  }
+
+  renderPopularRepoUI = (dataFetchStatus, fetchedPopularRepoList) => {
+    let popularRepoUI = null
+
+    if (dataFetchStatus === repoDataFetchResponseStatus.loading) {
+      popularRepoUI = (
+        <div>
+          <Loader type="ThreeDots" color="#0284c7" height={80} width={80} />
+        </div>
+      )
+    } else if (dataFetchStatus === repoDataFetchResponseStatus.success) {
+      popularRepoUI = (
+        <ul className="github-repo-list">
+          {fetchedPopularRepoList.map(popularRepoListItem => (
+            <RepositoryItem
+              key={popularRepoListItem.id}
+              itemData={popularRepoListItem}
+            />
+          ))}
+        </ul>
+      )
+    } else if (dataFetchStatus === repoDataFetchResponseStatus.failure) {
+      popularRepoUI = (
+        <div className="failed-data-load-content-container">
+          <img
+            className="failed-data-load-img"
+            src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
+            alt="failure view"
+          />
+          <p className="failed-data-load-msg">Something Went Wrong</p>
+        </div>
+      )
+    }
+
+    return popularRepoUI
   }
 
   render() {
     const {
       selectedRepoLanguageId,
       popularRepoListForSelectedLanguage,
-      isLoadingRepoData,
+      repoDataFetchingStatus,
     } = this.state
 
     return (
@@ -70,19 +129,9 @@ export default class GithubPopularRepos extends Component {
             />
           ))}
         </ul>
-        {isLoadingRepoData ? (
-          <div>
-            <Loader type="ThreeDots" color="#0284c7" height={80} width={80} />
-          </div>
-        ) : (
-          <ul className="github-repo-list">
-            {popularRepoListForSelectedLanguage.map(popularRepoListItem => (
-              <RepositoryItem
-                key={popularRepoListItem.id}
-                itemData={popularRepoListItem}
-              />
-            ))}
-          </ul>
+        {this.renderPopularRepoUI(
+          repoDataFetchingStatus,
+          popularRepoListForSelectedLanguage,
         )}
       </div>
     )
