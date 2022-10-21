@@ -40,7 +40,7 @@ export default class GithubPopularRepos extends Component {
     let popularRepoList = []
     let responseStatus = null
 
-    const repoDataFetchUrlString = `https://apis.ccbp.in/popular-repos?language='${repoLanguageId}`
+    const repoDataFetchUrlString = `https://apis.ccbp.in/popular-repos?language=${repoLanguageId}`
     // let repoDataFetchUrlInstance = new URL(repoDataFetchUrlString)
     // repoDataFetchUrlInstance.
     const repoDataResponse = await fetch(repoDataFetchUrlString)
