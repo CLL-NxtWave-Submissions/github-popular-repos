@@ -33,43 +33,37 @@ export default class GithubPopularRepos extends Component {
   }
 
   onRepoLanguageSelect = async repoLanguageId => {
-    this.setState(async prevPopularRepoState => {
-      const {repoDataFetchingStatus} = prevPopularRepoState
+    this.setState({
+      repoDataFetchingStatus: repoDataFetchResponseStatus.loading,
+    })
 
-      if (repoDataFetchingStatus !== repoDataFetchResponseStatus.loading) {
-        this.setState({
-          repoDataFetchingStatus: repoDataFetchResponseStatus.loading,
-        })
-      }
+    let popularRepoList = []
+    let responseStatus = null
 
-      let popularRepoList = []
-      let responseStatus = null
+    const repoDataFetchUrlString = `https://apis.ccbp.in/popular-repos?language='${repoLanguageId}`
+    // let repoDataFetchUrlInstance = new URL(repoDataFetchUrlString)
+    // repoDataFetchUrlInstance.
+    const repoDataResponse = await fetch(repoDataFetchUrlString)
 
-      const repoDataFetchUrlString = `https://apis.ccbp.in/popular-repos?language='${repoLanguageId}`
-      // let repoDataFetchUrlInstance = new URL(repoDataFetchUrlString)
-      // repoDataFetchUrlInstance.
-      const repoDataResponse = await fetch(repoDataFetchUrlString)
+    if (repoDataResponse.ok) {
+      const repoData = await repoDataResponse.json()
+      popularRepoList = repoData.popular_repos.map(popularRepoEntry => ({
+        id: popularRepoEntry.id,
+        name: popularRepoEntry.name,
+        issuesCount: popularRepoEntry.issues_count,
+        forksCount: popularRepoEntry.forks_count,
+        starsCount: popularRepoEntry.stars_count,
+        avatarUrl: popularRepoEntry.avatar_url,
+      }))
+      responseStatus = repoDataFetchResponseStatus.success
+    } else {
+      responseStatus = repoDataFetchResponseStatus.failure
+    }
 
-      if (repoDataResponse.ok) {
-        const repoData = await repoDataResponse.json()
-        popularRepoList = repoData.popular_repos.map(popularRepoEntry => ({
-          id: popularRepoEntry.id,
-          name: popularRepoEntry.name,
-          issuesCount: popularRepoEntry.issues_count,
-          forksCount: popularRepoEntry.forks_count,
-          starsCount: popularRepoEntry.stars_count,
-          avatarUrl: popularRepoEntry.avatar_url,
-        }))
-        responseStatus = repoDataFetchResponseStatus.success
-      } else {
-        responseStatus = repoDataFetchResponseStatus.failure
-      }
-
-      return {
-        selectedRepoLanguageId: repoLanguageId,
-        popularRepoListForSelectedLanguage: popularRepoList,
-        repoDataFetchingStatus: responseStatus,
-      }
+    this.setState({
+      selectedRepoLanguageId: repoLanguageId,
+      popularRepoListForSelectedLanguage: popularRepoList,
+      repoDataFetchingStatus: responseStatus,
     })
   }
 
