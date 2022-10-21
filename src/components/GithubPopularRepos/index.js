@@ -21,18 +21,32 @@ export default class GithubPopularRepos extends Component {
     isLoadingRepoData: true,
   }
 
-  onRepoLanguageSelect = async repoLanguageId => {
-    const repoDataFetchUrlString = `https://apis.ccbp.in/popular-repos?language='${repoLanguageId}`
-    // let repoDataFetchUrlInstance = new URL(repoDataFetchUrlString)
-    // repoDataFetchUrlInstance.
-    const repoDataResponse = await fetch(repoDataFetchUrlString)
-    const repoData = await repoDataResponse.json()
-    const popularRepoList = repoData.popular_repos
+  componentDidMount() {
+    this.onRepoLanguageSelect()
+  }
 
-    this.setState({
-      selectedRepoLanguageId: repoLanguageId,
-      popularRepoListForSelectedLanguage: popularRepoList,
-      isLoadingRepoData: false,
+  onRepoLanguageSelect = async repoLanguageId => {
+    this.setState(async prevPopularRepoState => {
+      const {isLoadingRepoData} = prevPopularRepoState
+
+      if (!isLoadingRepoData) {
+        this.setState({
+          isLoadingRepoData: true,
+        })
+      }
+
+      const repoDataFetchUrlString = `https://apis.ccbp.in/popular-repos?language='${repoLanguageId}`
+      // let repoDataFetchUrlInstance = new URL(repoDataFetchUrlString)
+      // repoDataFetchUrlInstance.
+      const repoDataResponse = await fetch(repoDataFetchUrlString)
+      const repoData = await repoDataResponse.json()
+      const popularRepoList = repoData.popular_repos
+
+      return {
+        selectedRepoLanguageId: repoLanguageId,
+        popularRepoListForSelectedLanguage: popularRepoList,
+        isLoadingRepoData: false,
+      }
     })
   }
 
