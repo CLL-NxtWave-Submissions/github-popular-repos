@@ -29,7 +29,7 @@ export default class GithubPopularRepos extends Component {
   }
 
   componentDidMount() {
-    this.onRepoLanguageSelect()
+    this.onRepoLanguageSelect(languageFiltersData[0].id)
   }
 
   onRepoLanguageSelect = async repoLanguageId => {
