@@ -1,5 +1,8 @@
 import {Component} from 'react'
 
+import LanguageFilterItem from '../LanguageFilterItem'
+import RepositoryItem from '../RepositoryItem'
+
 import './index.css'
 
 const languageFiltersData = [
