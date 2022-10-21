@@ -2,7 +2,9 @@ import './index.css'
 
 const LanguageFilterItem = props => {
   const {itemData, itemClickHandler, isSelected} = props
-  const {language} = itemData
+  const {id, language} = itemData
+
+  const onLanguageFilterSelect = () => itemClickHandler(id)
 
   return (
     <button
@@ -10,7 +12,7 @@ const LanguageFilterItem = props => {
       className={`language-filter-item-container ${
         isSelected && 'selected-language'
       }`}
-      onClick={itemClickHandler}
+      onClick={onLanguageFilterSelect}
     >
       {language}
     </button>
