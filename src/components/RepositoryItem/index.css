@@ -1,27 +1,28 @@
 .repository-item-bg-container {
   background-color: #f8f8ff;
-  border-radius: 0.8rem;
-  padding: 1rem;
+  border-radius: 2rem;
+  padding: 2rem;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-right: 0.5rem;
-  margin-bottom: 1rem;
+  margin-right: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .repository-item-avatar-img {
-  height: 5rem;
-  width: 1rem;
-  margin-bottom: 1rem;
+  height: 6rem;
+  width: 6rem;
+  margin-bottom: 0;
 }
 
 .repository-item-name {
   color: #e73959;
-  font-size: 2rem;
-  font-size: 550;
-  margin-bottom: 1.2rem;
+  font-size: 1.5rem;
+  font-weight: 550;
+  margin-top: 1rem;
+  margin-bottom: 0;
 }
 
 .repository-item-stats-list {
@@ -36,7 +37,7 @@
 .repository-item-stat-container {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .repository-item-stat-icon-img {
@@ -52,6 +53,17 @@
 
 @media (min-width: 768px) {
   .repository-item-bg-container {
-    width: 32%;
+    width: 30%;
+  }
+
+  .repository-item-avatar-img {
+    height: 8rem;
+    width: 8rem;
+    margin-bottom: 0;
+  }
+
+  .repository-item-name {
+    font-size: 1.7rem;
+    font-weight: 550;
   }
 }
