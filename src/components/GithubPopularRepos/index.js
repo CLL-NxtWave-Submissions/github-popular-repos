@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import Loader from 'react-loader-spinner'
 
 import LanguageFilterItem from '../LanguageFilterItem'
 import RepositoryItem from '../RepositoryItem'
@@ -17,18 +18,29 @@ export default class GithubPopularRepos extends Component {
   state = {
     selectedRepoLanguageId: 'ALL',
     popularRepoListForSelectedLanguage: [],
+    isLoadingRepoData: true,
   }
 
-  onRepoLanguageSelect = (repoLanguageId, popularRepoList) =>
+  onRepoLanguageSelect = async repoLanguageId => {
+    const repoDataFetchUrlString = `https://apis.ccbp.in/popular-repos?language='${repoLanguageId}`
+    // let repoDataFetchUrlInstance = new URL(repoDataFetchUrlString)
+    // repoDataFetchUrlInstance.
+    const repoDataResponse = await fetch(repoDataFetchUrlString)
+    const repoData = await repoDataResponse.json()
+    const popularRepoList = repoData.popular_repos
+
     this.setState({
       selectedRepoLanguageId: repoLanguageId,
       popularRepoListForSelectedLanguage: popularRepoList,
+      isLoadingRepoData: false,
     })
+  }
 
   render() {
     const {
       selectedRepoLanguageId,
       popularRepoListForSelectedLanguage,
+      isLoadingRepoData,
     } = this.state
 
     return (
@@ -44,14 +56,20 @@ export default class GithubPopularRepos extends Component {
             />
           ))}
         </ul>
-        <ul className="github-repo-list">
-          {popularRepoListForSelectedLanguage.map(popularRepoListItem => (
-            <RepositoryItem
-              key={popularRepoListItem.id}
-              itemData={popularRepoListItem}
-            />
-          ))}
-        </ul>
+        {isLoadingRepoData ? (
+          <div>
+            <Loader type="ThreeDots" color="#0284c7" height={80} width={80} />
+          </div>
+        ) : (
+          <ul className="github-repo-list">
+            {popularRepoListForSelectedLanguage.map(popularRepoListItem => (
+              <RepositoryItem
+                key={popularRepoListItem.id}
+                itemData={popularRepoListItem}
+              />
+            ))}
+          </ul>
+        )}
       </div>
     )
   }
