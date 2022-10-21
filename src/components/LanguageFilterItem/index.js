@@ -7,15 +7,19 @@ const LanguageFilterItem = props => {
   const onLanguageFilterSelect = () => itemClickHandler(id)
 
   return (
-    <button
-      type="button"
+    <li
       className={`language-filter-item-container ${
         isSelected && 'selected-language'
       }`}
-      onClick={onLanguageFilterSelect}
     >
-      {language}
-    </button>
+      <button
+        type="button"
+        className="language-filter-item-button"
+        onClick={onLanguageFilterSelect}
+      >
+        {language}
+      </button>
+    </li>
   )
 }
 
