@@ -35,6 +35,7 @@ export default class GithubPopularRepos extends Component {
   onRepoLanguageSelect = async repoLanguageId => {
     this.setState({
       repoDataFetchingStatus: repoDataFetchResponseStatus.loading,
+      selectedRepoLanguageId: repoLanguageId,
     })
 
     let popularRepoList = []
@@ -61,7 +62,6 @@ export default class GithubPopularRepos extends Component {
     }
 
     this.setState({
-      selectedRepoLanguageId: repoLanguageId,
       popularRepoListForSelectedLanguage: popularRepoList,
       repoDataFetchingStatus: responseStatus,
     })
