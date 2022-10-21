@@ -72,7 +72,7 @@ export default class GithubPopularRepos extends Component {
 
     if (dataFetchStatus === repoDataFetchResponseStatus.loading) {
       popularRepoUI = (
-        <div>
+        <div testid="loader">
           <Loader type="ThreeDots" color="#0284c7" height={80} width={80} />
         </div>
       )
