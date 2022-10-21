@@ -40,6 +40,7 @@ export default class GithubPopularRepos extends Component {
               key={languageFiltersDataItem.id}
               itemData={languageFiltersDataItem}
               itemClickHandler={this.onRepoLanguageSelect}
+              isSelected={languageFiltersDataItem.id === selectedRepoLanguageId}
             />
           ))}
         </ul>
