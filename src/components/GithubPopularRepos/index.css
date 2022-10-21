@@ -24,3 +24,27 @@
 .github-repo-language-list {
   margin-bottom: 2rem;
 }
+
+.failed-data-load-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.failed-data-load-img {
+  width: 85%;
+  margin-bottom: 2rem;
+}
+
+.failed-data-load-msg {
+  color: #1e293b;
+  font-size: 2.5rem;
+  font-weight: 600;
+  font-family: 'Roboto';
+}
+
+@media (min-width: 768px) {
+  .failed-data-load-msg {
+    font-size: 3.5rem;
+  }
+}
