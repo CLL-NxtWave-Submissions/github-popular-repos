@@ -8,6 +8,13 @@
   border: none;
 }
 
+.language-filter-item-button {
+  border: none;
+  cursor: pointer;
+  background: inherit;
+  outline: none;
+}
+
 .selected-language {
   color: #0284c7;
   border: 0.1rem solid #0284c7;
