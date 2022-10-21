@@ -7,7 +7,7 @@ const RepositoryItem = props => {
   return (
     <li className="repository-item-bg-container">
       <img className="repository-item-avatar-img" src={avatarUrl} alt={name} />
-      <p className="repository-item-name">{name}</p>
+      <h1 className="repository-item-name">{name}</h1>
       <ul className="repository-item-stats-list">
         <li className="repository-item-stat-container">
           <img
